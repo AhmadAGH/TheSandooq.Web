@@ -123,7 +123,9 @@
       [class.active]="activeTab === 'transactions'"
       (click)="setActiveTab('transactions')"
     >
-      المعاملات ({{ sandooq.incomes.length + sandooq.expenses.length }})
+      المعاملات ({{
+        (sandooq?.incomes?.length || 0) + (sandooq?.expenses?.length || 0)
+      }})
     </button>
   </div>
 
@@ -147,12 +149,12 @@
         </div>
         <div class="stat-card">
           <div class="stat-icon">📈</div>
-          <div class="stat-value">{{ sandooq.incomes.length }}</div>
+          <div class="stat-value">{{ sandooq?.incomes?.length || 0 }}</div>
           <div class="stat-label">الإيرادات</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">📉</div>
-          <div class="stat-value">{{ sandooq.expenses.length }}</div>
+          <div class="stat-value">{{ sandooq?.expenses?.length || 0 }}</div>
           <div class="stat-label">المصروفات</div>
         </div>
       </div>
@@ -221,7 +223,7 @@
             </div>
             <div class="balance-label">رصيد العضو</div>
           </div>
-          @if (isOwner(sandooq) && member.userId !== sandooq.ownerId) {
+          @if (isOwner(sandooq) && member.userId !== sandooq.creatorId) {
           <button class="remove-member-btn" (click)="removeMember(member)">
             <span class="btn-icon">🗑️</span>
           </button>

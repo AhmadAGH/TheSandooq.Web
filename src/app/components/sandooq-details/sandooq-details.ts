@@ -3,7 +3,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AsyncPipe, DatePipe, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import * as sandooq from '../../models/sandooq';
 import {
   CreateIncomeRequest,
   CreateExpenseRequest,
@@ -13,6 +12,7 @@ import { Observable, of, switchMap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../../services/auth/auth-service';
 import { SandooqService } from '../../services/sandooq/sandooq-service';
+import { AddMemberRequest, SandooqDetails } from '../../models/sandooq';
 
 @Component({
   selector: 'app-sandooq-details',
@@ -27,7 +27,7 @@ export class SandooqDetailsComponent implements OnInit {
   private sandooqService = inject(SandooqService);
   private authService = inject(AuthService);
 
-  sandooq$: Observable<sandooq.SandooqDetails | null> = of(null);
+  sandooq$: Observable<SandooqDetails | null> = of(null);
   user$ = this.authService.user$;
 
   sandooqId: number = 0;
@@ -41,7 +41,7 @@ export class SandooqDetailsComponent implements OnInit {
   activeTab = 'overview';
 
   // Forms
-  newMember: sandooq.AddMemberRequest = {
+  newMember: AddMemberRequest = {
     sandooqId: 0,
     userEmail: '',
   };
@@ -83,7 +83,7 @@ export class SandooqDetailsComponent implements OnInit {
     });
   }
 
-  loadSandooqDetails(): Observable<sandooq.SandooqDetails | null> {
+  loadSandooqDetails(): Observable<SandooqDetails | null> {
     this.isLoading = true;
     this.errorMessage = '';
 
@@ -123,6 +123,7 @@ export class SandooqDetailsComponent implements OnInit {
       alert('تم إضافة العضو بنجاح!');
     } catch (error: any) {
       console.error('Failed to add member:', error);
+      console.error(error.message);
       alert('فشل في إضافة العضو: ' + error.message);
     }
   }
@@ -220,7 +221,7 @@ export class SandooqDetailsComponent implements OnInit {
   }
 
   formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('ar-SA', {
+    return new Intl.NumberFormat('ar', {
       style: 'currency',
       currency: 'SAR',
     }).format(amount);
@@ -236,7 +237,7 @@ export class SandooqDetailsComponent implements OnInit {
     return this.getBalanceColor(balance);
   }
 
-  isOwner(sandooq: sandooq.SandooqDetails): boolean {
+  isOwner(sandooq: SandooqDetails): boolean {
     return this.sandooqService.isOwner(sandooq);
   }
 }

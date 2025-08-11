@@ -8,7 +8,7 @@ export interface Sandooq {
   monthlyPayment: number;
   maxInvestmentPercentage: number;
   createdDate: string;
-  ownerId: string;
+  creatorId: string;
   members: SandooqMember[];
   categories: Category[];
   incomes: Income[];

@@ -400,7 +400,7 @@ export class SandooqService {
   // Check if current user is owner
   isOwner(sandooq: Sandooq): boolean {
     const currentUser = this.authService.getCurrentUser();
-    return currentUser?.uid === sandooq.ownerId;
+    return currentUser?.uid === sandooq.creatorId;
   }
 
   // ==================== HELPER METHODS ====================
