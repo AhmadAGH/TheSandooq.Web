@@ -295,7 +295,6 @@
     </div>
     }
   </div>
-  }
 
   <!-- Add Member Modal -->
   @if (showAddMember) {
@@ -357,15 +356,19 @@
           />
         </div>
         <div class="form-group">
-          <label for="incomeDescription">الوصف</label>
-          <input
-            type="text"
-            id="incomeDescription"
-            [(ngModel)]="newIncome.description"
-            name="incomeDescription"
-            placeholder="وصف الإيراد (اختياري)"
+          <label for="incomeCategory">الفئة *</label>
+          <select
+            id="incomeCategory"
+            [(ngModel)]="newIncome.categoryId"
+            name="incomeCategory"
+            required
             class="form-input"
-          />
+          >
+            <option value="">اختر الفئة</option>
+            @for (cat of sandooq.categories; track cat.id) { @if(cat.isIncome){
+            <option [value]="cat.id">{{ cat.name }}</option>
+            } }
+          </select>
         </div>
         <div class="form-actions">
           <button
@@ -409,15 +412,19 @@
           />
         </div>
         <div class="form-group">
-          <label for="expenseDescription">الوصف</label>
-          <input
-            type="text"
-            id="expenseDescription"
-            [(ngModel)]="newExpense.description"
-            name="expenseDescription"
-            placeholder="وصف المصروف (اختياري)"
+          <label for="incomeCategory">الفئة *</label>
+          <select
+            id="incomeCategory"
+            [(ngModel)]="newIncome.categoryId"
+            name="incomeCategory"
+            required
             class="form-input"
-          />
+          >
+            <option value="">اختر الفئة</option>
+            @for (cat of sandooq.categories; track cat.id) { @if(!cat.isIncome){
+            <option [value]="cat.id">{{ cat.name }}</option>
+            } }
+          </select>
         </div>
         <div class="form-actions">
           <button
@@ -438,5 +445,5 @@
       </form>
     </div>
   </div>
-  }
+  } }
 </div>

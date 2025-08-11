@@ -6,6 +6,7 @@ export interface Category {
   mainCategoryType: MainCategoryType;
   isRequireMember: boolean;
   sandooqId: number;
+  isIncome: boolean;
 }
 
 export interface CreateCategoryRequest {
