@@ -1,0 +1,128 @@
+<div class="profile-container">
+  @if (user$ | async; as user) {
+  <div class="profile-card">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <img [src]="user.photoURL || '/assets/default-avatar.png'" [alt]="user.displayName || 'User'"
+          onerror="this.src='/assets/default-avatar.png'">
+        <div class="avatar-overlay">
+          <span class="camera-icon">📷</span>
+        </div>
+      </div>
+      <div class="profile-info">
+        <h1>{{ user.displayName || 'User' }}</h1>
+        <p class="user-email">{{ user.email }}</p>
+        <span class="user-status">✅ Verified Account</span>
+      </div>
+    </div>
+
+    <!-- Profile Details -->
+    <div class="profile-details">
+      <h2>Account Information</h2>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Full Name</label>
+          <div class="detail-value">{{ user.displayName || 'Not provided' }}</div>
+        </div>
+
+        <div class="detail-item">
+          <label>Email Address</label>
+          <div class="detail-value">{{ user.email }}</div>
+        </div>
+
+        <div class="detail-item">
+          <label>User ID</label>
+          <div class="detail-value">{{ user.uid }}</div>
+        </div>
+
+        <div class="detail-item">
+          <label>Account Created</label>
+          <div class="detail-value">{{ user.metadata.creationTime | date:'medium' }}</div>
+        </div>
+
+        <div class="detail-item">
+          <label>Last Sign In</label>
+          <div class="detail-value">{{ user.metadata.lastSignInTime | date:'medium' }}</div>
+        </div>
+
+        <div class="detail-item">
+          <label>Email Verified</label>
+          <div class="detail-value">
+            @if (user.emailVerified) {
+            <span class="verified">✅ Verified</span>
+            } @else {
+            <span class="unverified">❌ Not Verified</span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account Actions -->
+    <div class="profile-actions">
+      <h2>Account Actions</h2>
+
+      <div class="action-buttons">
+        <button class="btn btn-primary">
+          <span class="btn-icon">✏️</span>
+          Edit Profile
+        </button>
+
+        <button class="btn btn-secondary">
+          <span class="btn-icon">🔒</span>
+          Change Password
+        </button>
+
+        <button class="btn btn-secondary">
+          <span class="btn-icon">📧</span>
+          Update Email
+        </button>
+
+        <button class="btn btn-warning" (click)="logout()">
+          <span class="btn-icon">🚪</span>
+          Sign Out
+        </button>
+
+        <button class="btn btn-danger" (click)="deleteAccount()">
+          <span class="btn-icon">🗑️</span>
+          Delete Account
+        </button>
+      </div>
+    </div>
+
+    <!-- App Statistics -->
+    <div class="profile-stats">
+      <h2>Your Activity</h2>
+
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Active Sandooqs</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-number">12</div>
+          <div class="stat-label">Total Transactions</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-number">$2,450</div>
+          <div class="stat-label">Total Savings</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-number">5</div>
+          <div class="stat-label">Family Members</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  } @else {
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading profile...</p>
+  </div>
+  }
+</div>

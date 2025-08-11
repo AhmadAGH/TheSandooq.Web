@@ -1,0 +1,62 @@
+<nav class="header-nav">
+  <div class="nav-container">
+    <!-- Logo/Brand -->
+    <div class="brand">
+      <div class="logo-icon">🏦</div>
+      <div class="brand-text">
+        <h2>الصندوق</h2>
+        <span>TheSandooq</span>
+      </div>
+    </div>
+
+    <!-- Navigation Links (only show when authenticated) -->
+    @if (user$ | async; as user) {
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">📊</span>
+        الداشبورد
+      </a>
+      <a routerLink="/sandooqs" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">💰</span>
+        صناديقي
+      </a>
+      <a routerLink="/profile" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">👤</span>
+        الملف الشخصي
+      </a>
+    </div>
+    }
+
+    <!-- User Section -->
+    <div class="user-section">
+      <!-- Show user info when authenticated -->
+      @if (user$ | async; as user) {
+      <div class="user-info">
+        <div class="user-avatar">
+          <img
+            [src]="user.photoURL || '/assets/default-avatar.png'"
+            [alt]="user.displayName || 'User'"
+            onerror="this.src='/assets/default-avatar.png'"
+          />
+        </div>
+        <div class="user-details">
+          <span class="user-name">{{ user.displayName || "User" }}</span>
+          <span class="user-email">{{ user.email }}</span>
+        </div>
+        <button class="logout-btn" (click)="logout()" title="Logout">
+          <span class="logout-icon">🚪</span>
+          Logout
+        </button>
+      </div>
+      } @else {
+      <!-- Show login button when not authenticated -->
+      <div class="login-section">
+        <a routerLink="/login" class="login-btn">
+          <span class="login-icon">🔑</span>
+          Login
+        </a>
+      </div>
+      }
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,440 @@
+<div class="sandooq-details-container">
+  <!-- Back Navigation -->
+  <div class="back-nav">
+    <button routerLink="/sandooqs" class="back-btn">
+      <span class="back-icon">←</span>
+      العودة إلى الصناديق
+    </button>
+  </div>
+
+  <!-- Error Message -->
+  @if (errorMessage) {
+  <div class="error-message">
+    <span class="error-icon">⚠️</span>
+    {{ errorMessage }}
+    <button class="retry-btn" (click)="loadSandooqDetails()">
+      إعادة المحاولة
+    </button>
+  </div>
+  }
+
+  <!-- Loading State -->
+  @if (isLoading) {
+  <div class="loading-container">
+    <div class="loading-spinner large"></div>
+    <p>جاري تحميل تفاصيل الصندوق...</p>
+  </div>
+  }
+
+  <!-- Sandooq Details -->
+  @if (sandooq$ | async; as sandooq) {
+  <!-- Header -->
+  <div class="sandooq-header">
+    <div class="header-info">
+      <h1>{{ sandooq.name }}</h1>
+      @if (sandooq.description) {
+      <p class="description">{{ sandooq.description }}</p>
+      }
+      <div class="header-badges">
+        @if (isOwner(sandooq)) {
+        <span class="badge owner">👑 المالك</span>
+        } @else {
+        <span class="badge member">👥 عضو</span>
+        }
+        <span class="badge created"
+          >📅 {{ sandooq.createdDate | date : "shortDate" : "ar-SA" }}</span
+        >
+      </div>
+    </div>
+
+    <div class="header-actions">
+      @if (isOwner(sandooq)) {
+      <button class="btn btn-primary" (click)="showAddMember = true">
+        <span class="btn-icon">👥</span>
+        إضافة عضو
+      </button>
+      }
+      <button class="btn btn-success" (click)="showAddIncome = true">
+        <span class="btn-icon">💰</span>
+        إضافة إيراد
+      </button>
+      <button class="btn btn-warning" (click)="showAddExpense = true">
+        <span class="btn-icon">💸</span>
+        إضافة مصروف
+      </button>
+    </div>
+  </div>
+
+  <!-- Balance Overview -->
+  <div class="balance-overview">
+    <div class="balance-card main-balance">
+      <div class="balance-amount" [class]="getBalanceColor(sandooq.balance)">
+        {{ formatCurrency(sandooq.balance) }}
+      </div>
+      <div class="balance-label">الرصيد الحالي</div>
+    </div>
+
+    <div class="balance-card income">
+      <div class="balance-amount positive">
+        {{ formatCurrency(sandooq.totalIncome) }}
+      </div>
+      <div class="balance-label">إجمالي الإيرادات</div>
+    </div>
+
+    <div class="balance-card expense">
+      <div class="balance-amount negative">
+        {{ formatCurrency(sandooq.totalExpenses) }}
+      </div>
+      <div class="balance-label">إجمالي المصروفات</div>
+    </div>
+
+    <div class="balance-card info">
+      <div class="info-row">
+        <span class="info-label">الدفعة الشهرية:</span>
+        <span class="info-value">{{
+          formatCurrency(sandooq.monthlyPayment)
+        }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">نسبة الاستثمار:</span>
+        <span class="info-value">{{ sandooq.maxInvestmentPercentage }}%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="tabs-nav">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'overview'"
+      (click)="setActiveTab('overview')"
+    >
+      نظرة عامة
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'members'"
+      (click)="setActiveTab('members')"
+    >
+      الأعضاء ({{ sandooq.members.length }})
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'transactions'"
+      (click)="setActiveTab('transactions')"
+    >
+      المعاملات ({{ sandooq.incomes.length + sandooq.expenses.length }})
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Overview Tab -->
+    @if (activeTab === 'overview') {
+    <div class="overview-content">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value">{{ sandooq.members.length }}</div>
+          <div class="stat-label">إجمالي الأعضاء</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-value">
+            {{ sandooq.incomes.length + sandooq.expenses.length }}
+          </div>
+          <div class="stat-label">إجمالي المعاملات</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-value">{{ sandooq.incomes.length }}</div>
+          <div class="stat-label">الإيرادات</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📉</div>
+          <div class="stat-value">{{ sandooq.expenses.length }}</div>
+          <div class="stat-label">المصروفات</div>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="recent-transactions">
+        <h3>آخر المعاملات</h3>
+        <div class="transactions-list">
+          @for (income of sandooq.incomes.slice(0, 5); track income.id) {
+          <div class="transaction-item income">
+            <div class="transaction-info">
+              <div class="transaction-type">💰 إيراد</div>
+              <div class="transaction-desc">
+                {{ income.description || "بدون وصف" }}
+              </div>
+              <div class="transaction-date">
+                {{ income.date | date : "short" : "ar-SA" }}
+              </div>
+            </div>
+            <div class="transaction-amount positive">
+              +{{ formatCurrency(income.amount) }}
+            </div>
+          </div>
+          } @for (expense of sandooq.expenses.slice(0, 5); track expense.id) {
+          <div class="transaction-item expense">
+            <div class="transaction-info">
+              <div class="transaction-type">💸 مصروف</div>
+              <div class="transaction-desc">
+                {{ expense.description || "بدون وصف" }}
+              </div>
+              <div class="transaction-date">
+                {{ expense.date | date : "short" : "ar-SA" }}
+              </div>
+            </div>
+            <div class="transaction-amount negative">
+              -{{ formatCurrency(expense.amount) }}
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Members Tab -->
+    @if (activeTab === 'members') {
+    <div class="members-content">
+      <div class="members-grid">
+        @for (member of sandooq.members; track member.id) {
+        <div class="member-card">
+          <div class="member-info">
+            <div class="member-name">{{ member.userName }}</div>
+            <div class="member-email">{{ member.userEmail }}</div>
+            <div class="member-joined">
+              انضم في: {{ member.joinedDate | date : "shortDate" : "ar-SA" }}
+            </div>
+          </div>
+          <div class="member-balance">
+            <div
+              class="balance-amount"
+              [class]="
+                getMemberBalanceColor(sandooq.memberBalances[member.id] || 0)
+              "
+            >
+              {{ formatCurrency(sandooq.memberBalances[member.id] || 0) }}
+            </div>
+            <div class="balance-label">رصيد العضو</div>
+          </div>
+          @if (isOwner(sandooq) && member.userId !== sandooq.ownerId) {
+          <button class="remove-member-btn" (click)="removeMember(member)">
+            <span class="btn-icon">🗑️</span>
+          </button>
+          }
+        </div>
+        }
+      </div>
+    </div>
+    }
+
+    <!-- Transactions Tab -->
+    @if (activeTab === 'transactions') {
+    <div class="transactions-content">
+      <div class="transactions-list">
+        @for (income of sandooq.incomes; track income.id) {
+        <div class="transaction-item income">
+          <div class="transaction-info">
+            <div class="transaction-type">💰 إيراد</div>
+            <div class="transaction-desc">
+              {{ income.description || "بدون وصف" }}
+            </div>
+            <div class="transaction-meta">
+              <span class="transaction-date">{{
+                income.date | date : "short" : "ar-SA"
+              }}</span>
+              @if (income.member) {
+              <span class="transaction-member">{{
+                income.member.userName
+              }}</span>
+              } @if (income.category) {
+              <span class="transaction-category">{{
+                income.category.name
+              }}</span>
+              }
+            </div>
+          </div>
+          <div class="transaction-amount positive">
+            +{{ formatCurrency(income.amount) }}
+          </div>
+        </div>
+        } @for (expense of sandooq.expenses; track expense.id) {
+        <div class="transaction-item expense">
+          <div class="transaction-info">
+            <div class="transaction-type">💸 مصروف</div>
+            <div class="transaction-desc">
+              {{ expense.description || "بدون وصف" }}
+            </div>
+            <div class="transaction-meta">
+              <span class="transaction-date">{{
+                expense.date | date : "short" : "ar-SA"
+              }}</span>
+              @if (expense.member) {
+              <span class="transaction-member">{{
+                expense.member.userName
+              }}</span>
+              } @if (expense.category) {
+              <span class="transaction-category">{{
+                expense.category.name
+              }}</span>
+              }
+            </div>
+          </div>
+          <div class="transaction-amount negative">
+            -{{ formatCurrency(expense.amount) }}
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Add Member Modal -->
+  @if (showAddMember) {
+  <div class="modal-overlay" (click)="showAddMember = false">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>إضافة عضو جديد</h3>
+      <form (ngSubmit)="addMember()" #memberForm="ngForm">
+        <div class="form-group">
+          <label for="memberEmail">البريد الإلكتروني *</label>
+          <input
+            type="email"
+            id="memberEmail"
+            [(ngModel)]="newMember.userEmail"
+            name="memberEmail"
+            placeholder="أدخل البريد الإلكتروني للعضو الجديد"
+            required
+            class="form-input"
+          />
+        </div>
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="showAddMember = false"
+          >
+            إلغاء
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!newMember.userEmail.trim()"
+          >
+            إضافة العضو
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+
+  <!-- Add Income Modal -->
+  @if (showAddIncome) {
+  <div class="modal-overlay" (click)="showAddIncome = false">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>إضافة إيراد جديد</h3>
+      <form (ngSubmit)="addIncome()" #incomeForm="ngForm">
+        <div class="form-group">
+          <label for="incomeAmount">المبلغ (ريال) *</label>
+          <input
+            type="number"
+            id="incomeAmount"
+            [(ngModel)]="newIncome.amount"
+            name="incomeAmount"
+            placeholder="أدخل مبلغ الإيراد"
+            required
+            min="0.01"
+            step="0.01"
+            class="form-input"
+          />
+        </div>
+        <div class="form-group">
+          <label for="incomeDescription">الوصف</label>
+          <input
+            type="text"
+            id="incomeDescription"
+            [(ngModel)]="newIncome.description"
+            name="incomeDescription"
+            placeholder="وصف الإيراد (اختياري)"
+            class="form-input"
+          />
+        </div>
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="showAddIncome = false"
+          >
+            إلغاء
+          </button>
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="newIncome.amount <= 0"
+          >
+            إضافة الإيراد
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+
+  <!-- Add Expense Modal -->
+  @if (showAddExpense) {
+  <div class="modal-overlay" (click)="showAddExpense = false">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>إضافة مصروف جديد</h3>
+      <form (ngSubmit)="addExpense()" #expenseForm="ngForm">
+        <div class="form-group">
+          <label for="expenseAmount">المبلغ (ريال) *</label>
+          <input
+            type="number"
+            id="expenseAmount"
+            [(ngModel)]="newExpense.amount"
+            name="expenseAmount"
+            placeholder="أدخل مبلغ المصروف"
+            required
+            min="0.01"
+            step="0.01"
+            class="form-input"
+          />
+        </div>
+        <div class="form-group">
+          <label for="expenseDescription">الوصف</label>
+          <input
+            type="text"
+            id="expenseDescription"
+            [(ngModel)]="newExpense.description"
+            name="expenseDescription"
+            placeholder="وصف المصروف (اختياري)"
+            class="form-input"
+          />
+        </div>
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="showAddExpense = false"
+          >
+            إلغاء
+          </button>
+          <button
+            type="submit"
+            class="btn btn-warning"
+            [disabled]="newExpense.amount <= 0"
+          >
+            إضافة المصروف
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+</div>

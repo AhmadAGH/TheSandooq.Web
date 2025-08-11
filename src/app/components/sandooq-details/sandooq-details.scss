@@ -1,0 +1,812 @@
+.sandooq-details-container {
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  padding: 2rem;
+  direction: rtl;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+// ==================== BACK NAVIGATION ====================
+.back-nav {
+  margin-bottom: 2rem;
+
+  .back-btn {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #4c63d2;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+
+    .back-icon {
+      font-size: 1.2rem;
+      transform: rotate(180deg); // Flip for RTL
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.2);
+    }
+  }
+}
+
+// ==================== ERROR MESSAGE ====================
+.error-message {
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  background: linear-gradient(135deg, #ffe8e8 0%, #fff0f0 100%);
+  color: #e74c3c;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  border-right: 4px solid #ff6b6b;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.15);
+
+  .retry-btn {
+    margin-right: auto;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    &:hover {
+      background: linear-gradient(45deg, #ee5a52, #e74c3c);
+    }
+  }
+}
+
+// ==================== LOADING STATE ====================
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+
+  .loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(102, 126, 234, 0.1);
+    border-top: 5px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #8b95c7;
+    font-size: 1.1rem;
+    margin: 0;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+}
+
+// ==================== SANDOOQ HEADER ====================
+.sandooq-header {
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-info {
+    flex: 1;
+
+    h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+    }
+
+    .description {
+      margin: 0 0 1rem 0;
+      color: #6c7293;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .header-badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+
+      .badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+        &.owner {
+          background: linear-gradient(45deg, #ffd700, #ffb347);
+          color: #8b4513;
+        }
+
+        &.member {
+          background: linear-gradient(45deg, #667eea, #764ba2);
+          color: white;
+        }
+
+        &.created {
+          background: linear-gradient(45deg, #00d4aa, #01a085);
+          color: white;
+        }
+      }
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+      justify-content: stretch;
+
+      .btn {
+        flex: 1;
+      }
+    }
+  }
+}
+
+// ==================== BALANCE OVERVIEW ====================
+.balance-overview {
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+
+  .balance-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15);
+    }
+
+    &.main-balance {
+      border-top: 4px solid #667eea;
+    }
+
+    &.income {
+      border-top: 4px solid #00d4aa;
+    }
+
+    &.expense {
+      border-top: 4px solid #ff6b6b;
+    }
+
+    &.info {
+      text-align: right;
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .info-label {
+          color: #6c7293;
+          font-size: 0.9rem;
+          font-weight: 500;
+          font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .info-value {
+          background: linear-gradient(45deg, #667eea, #764ba2);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          font-weight: 600;
+          font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+      }
+    }
+
+    .balance-amount {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+      &.positive {
+        background: linear-gradient(45deg, #00d4aa, #01a085);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      &.negative {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      &.neutral {
+        color: #8b95c7;
+      }
+    }
+
+    .balance-label {
+      color: #6c7293;
+      font-size: 0.9rem;
+      font-weight: 500;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+  }
+}
+
+// ==================== TABS ====================
+.tabs-nav {
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  padding: 0.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+  display: flex;
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: transparent;
+    color: #6c7293;
+
+    &.active {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    &:hover:not(.active) {
+      background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+      color: #4c63d2;
+    }
+  }
+}
+
+.tab-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// ==================== OVERVIEW CONTENT ====================
+.overview-content {
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .stat-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+      text-align: center;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15);
+      }
+
+      .stat-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #4c63d2;
+        margin-bottom: 0.25rem;
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .stat-label {
+        color: #6c7293;
+        font-size: 0.9rem;
+        font-weight: 500;
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+    }
+  }
+
+  .recent-transactions {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+
+    h3 {
+      margin: 0 0 1.5rem 0;
+      color: #4c63d2;
+      font-size: 1.5rem;
+      font-weight: 600;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+  }
+}
+
+// ==================== MEMBERS CONTENT ====================
+.members-content {
+  .members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+
+    .member-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+      position: relative;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15);
+      }
+
+      .member-info {
+        margin-bottom: 1rem;
+
+        .member-name {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: #4c63d2;
+          margin-bottom: 0.25rem;
+          font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .member-email {
+          color: #6c7293;
+          font-size: 0.9rem;
+          margin-bottom: 0.25rem;
+          font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .member-joined {
+          color: #8b95c7;
+          font-size: 0.8rem;
+          font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+      }
+
+      .member-balance {
+        text-align: center;
+        padding: 1rem;
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+        border-radius: 12px;
+
+        .balance-amount {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 0.25rem;
+          font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+          &.positive {
+            background: linear-gradient(45deg, #00d4aa, #01a085);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+
+          &.negative {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+
+          &.neutral {
+            color: #8b95c7;
+          }
+        }
+
+        .balance-label {
+          color: #6c7293;
+          font-size: 0.8rem;
+          font-weight: 500;
+          font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+      }
+
+      .remove-member-btn {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          background: linear-gradient(45deg, #ee5a52, #e74c3c);
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+}
+
+// ==================== TRANSACTIONS CONTENT ====================
+.transactions-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .transaction-item {
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+    }
+
+    &.income {
+      border-right: 4px solid #00d4aa;
+    }
+
+    &.expense {
+      border-right: 4px solid #ff6b6b;
+    }
+
+    .transaction-info {
+      flex: 1;
+
+      .transaction-type {
+        font-weight: 600;
+        color: #4c63d2;
+        margin-bottom: 0.25rem;
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .transaction-desc {
+        color: #6c7293;
+        margin-bottom: 0.5rem;
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .transaction-meta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .transaction-date,
+        .transaction-member,
+        .transaction-category {
+          font-size: 0.8rem;
+          color: #8b95c7;
+          font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+      }
+    }
+
+    .transaction-amount {
+      font-size: 1.2rem;
+      font-weight: 700;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+      &.positive {
+        background: linear-gradient(45deg, #00d4aa, #01a085);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      &.negative {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+  }
+}
+
+// ==================== MODALS ====================
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+
+  .modal-content {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    h3 {
+      margin: 0 0 1.5rem 0;
+      color: #4c63d2;
+      font-size: 1.5rem;
+      font-weight: 600;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #4c63d2;
+        font-size: 0.9rem;
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e8ecff;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: right;
+
+        &:focus {
+          outline: none;
+          border-color: #667eea;
+          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        &[type="number"] {
+          text-align: left;
+        }
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-start;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+// ==================== BUTTONS ====================
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  text-decoration: none;
+  font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  .btn-icon {
+    font-size: 1.1rem;
+  }
+
+  &.btn-primary {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(45deg, #764ba2, #f093fb);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+  }
+
+  &.btn-secondary {
+    background: linear-gradient(45deg, #a8b2d1, #8b95c7);
+    color: white;
+    box-shadow: 0 4px 12px rgba(168, 178, 209, 0.3);
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(45deg, #8b95c7, #6c7293);
+      transform: translateY(-2px);
+    }
+  }
+
+  &.btn-success {
+    background: linear-gradient(45deg, #00d4aa, #01a085);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(45deg, #01a085, #00b894);
+      transform: translateY(-2px);
+    }
+  }
+
+  &.btn-warning {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(45deg, #ee5a52, #e74c3c);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// ==================== ANIMATIONS ====================
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// ==================== RESPONSIVE DESIGN ====================
+@media (max-width: 768px) {
+  .balance-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .members-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .transaction-item {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+
+    .transaction-amount {
+      align-self: flex-end;
+    }
+  }
+}
+
+// ==================== DARK MODE SUPPORT ====================
+@media (prefers-color-scheme: dark) {
+  .sandooq-details-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  }
+
+  .back-btn,
+  .sandooq-header,
+  .balance-card,
+  .tabs-nav,
+  .overview-content .recent-transactions,
+  .stat-card,
+  .member-card,
+  .transactions-content,
+  .transaction-item,
+  .modal-content {
+    background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+    color: #e8ecff;
+  }
+
+  .description,
+  .balance-label,
+  .stat-label,
+  .member-email,
+  .member-joined,
+  .transaction-desc {
+    color: #a8b2d1;
+  }
+
+  .form-input {
+    background: linear-gradient(135deg, #2a2a3e 0%, #1e1e2e 100%);
+    border-color: rgba(102, 126, 234, 0.2);
+    color: #e8ecff;
+  }
+}

@@ -1,0 +1,224 @@
+<div class="sandooqs-container">
+  <!-- Header Section -->
+  <div class="sandooqs-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>صناديقي</h1>
+        <p>إدارة صناديق الادخار العائلية وتتبع المعاملات</p>
+      </div>
+      <button
+        class="btn btn-primary create-btn"
+        (click)="toggleCreateForm()"
+        [disabled]="isLoading"
+      >
+        <span class="btn-icon">➕</span>
+        إنشاء صندوق جديد
+      </button>
+    </div>
+  </div>
+
+  <!-- Create Form -->
+  @if (showCreateForm) {
+  <div class="create-form-container">
+    <div class="create-form">
+      <h3>إنشاء صندوق جديد</h3>
+      <form (ngSubmit)="createSandooq()" #createForm="ngForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sandooqName">اسم الصندوق *</label>
+            <input
+              type="text"
+              id="sandooqName"
+              [(ngModel)]="newSandooq.name"
+              name="sandooqName"
+              placeholder="أدخل اسم الصندوق (مثال: صندوق الإجازة العائلية)"
+              required
+              maxlength="100"
+              class="form-input"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="monthlyPayment">الدفعة الشهرية (ريال) *</label>
+            <input
+              type="number"
+              id="monthlyPayment"
+              [(ngModel)]="newSandooq.monthlyPayment"
+              name="monthlyPayment"
+              placeholder="مثال: 500"
+              required
+              min="1"
+              step="0.01"
+              class="form-input"
+            />
+            <small class="form-hint">المبلغ المطلوب من كل عضو شهرياً</small>
+          </div>
+
+          <div class="form-group">
+            <label for="maxInvestmentPercentage"
+              >نسبة الاستثمار القصوى (%) *</label
+            >
+            <input
+              type="number"
+              id="maxInvestmentPercentage"
+              [(ngModel)]="newSandooq.maxInvestmentPercentage"
+              name="maxInvestmentPercentage"
+              placeholder="مثال: 15"
+              required
+              min="1"
+              max="100"
+              step="0.1"
+              class="form-input"
+            />
+            <small class="form-hint"
+              >أقصى نسبة يمكن استثمارها من رصيد الصندوق</small
+            >
+          </div>
+        </div>
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="toggleCreateForm()"
+            [disabled]="isCreating"
+          >
+            إلغاء
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="
+              isCreating ||
+              !newSandooq.name.trim() ||
+              newSandooq.monthlyPayment <= 0
+            "
+          >
+            @if (isCreating) {
+            <span class="loading-spinner"></span>
+            جاري الإنشاء... } @else { إنشاء الصندوق }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage) {
+  <div class="error-message">
+    <span class="error-icon">⚠️</span>
+    {{ errorMessage }}
+    <button class="retry-btn" (click)="loadSandooqs()">إعادة المحاولة</button>
+  </div>
+  }
+
+  <!-- Loading State -->
+  @if (isLoading && !(sandooqs$ | async)) {
+  <div class="loading-container">
+    <div class="loading-spinner large"></div>
+    <p>جاري تحميل صناديقك...</p>
+  </div>
+  }
+
+  <!-- Sandooqs Grid -->
+  @if (sandooqs$ | async; as sandooqs) { @if (sandooqs.length > 0) {
+  <div class="sandooqs-grid">
+    @for (sandooq of sandooqs; track sandooq.id) {
+    <div class="sandooq-card" (click)="viewSandooq(sandooq.id)">
+      <!-- Card Header -->
+      <div class="card-header">
+        <div class="sandooq-info">
+          <h3>{{ sandooq.name }}</h3>
+          @if (sandooq.description) {
+          <p class="description">{{ sandooq.description }}</p>
+          }
+        </div>
+        <div class="owner-badge">
+          @if (sandooq.isOwner) {
+          <span class="badge owner">👑 المالك</span>
+          } @else {
+          <span class="badge member">👥 عضو</span>
+          }
+        </div>
+      </div>
+
+      <!-- Balance Display -->
+      <div class="balance-section">
+        <div
+          class="balance-amount"
+          [class]="getBalanceColor(sandooq.totalBalance)"
+        >
+          {{ formatCurrency(sandooq.totalBalance) }}
+        </div>
+        <div class="balance-label">الرصيد الحالي</div>
+      </div>
+
+      <!-- Financial Info -->
+      <div class="financial-info">
+        <div class="info-item">
+          <span class="info-label">الدفعة الشهرية:</span>
+          <span class="info-value">{{
+            formatCurrency(sandooq.monthlyPayment)
+          }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">نسبة الاستثمار:</span>
+          <span class="info-value">{{ sandooq.maxInvestmentPercentage }}%</span>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-section">
+        <div class="stat-item">
+          <span class="stat-icon">👥</span>
+          <span class="stat-value">{{ sandooq.totalMembers }}</span>
+          <span class="stat-label">الأعضاء</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">📊</span>
+          <span class="stat-value">{{ sandooq.totalTransactions }}</span>
+          <span class="stat-label">المعاملات</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">🕒</span>
+          <span class="stat-value">{{
+            getLastActivityText(sandooq.lastActivity)
+          }}</span>
+          <span class="stat-label">آخر نشاط</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="card-actions">
+        <button class="action-btn view-btn">
+          <span class="btn-icon">👁️</span>
+          عرض التفاصيل
+        </button>
+        @if (sandooq.isOwner) {
+        <button
+          class="action-btn delete-btn"
+          (click)="deleteSandooq(sandooq, $event)"
+          title="حذف الصندوق"
+        >
+          <span class="btn-icon">🗑️</span>
+        </button>
+        }
+      </div>
+    </div>
+    }
+  </div>
+  } @else {
+  <!-- Empty State -->
+  <div class="empty-state">
+    <div class="empty-icon">🏦</div>
+    <h2>لا توجد صناديق بعد</h2>
+    <p>أنشئ صندوقك الأول لبدء إدارة مدخرات العائلة</p>
+    <button class="btn btn-primary" (click)="toggleCreateForm()">
+      <span class="btn-icon">➕</span>
+      إنشاء صندوقك الأول
+    </button>
+  </div>
+  } }
+</div>
